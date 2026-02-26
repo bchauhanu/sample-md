@@ -7,6 +7,7 @@ This file demonstrates every common Markdown element so AEM's rendering pipeline
 ## Table of Contents
 
 - [Headings](#headings)
+  - [Headings L2](#headingsl2)    
 - [Paragraphs and Inline Text](#paragraphs-and-inline-text)
 - [Blockquotes](#blockquotes)
 - [Lists](#lists)
@@ -26,7 +27,7 @@ This file demonstrates every common Markdown element so AEM's rendering pipeline
 
 ---
 
-## Headings
+## Headings {#headings}
 
 # Heading Level 1
 ## Heading Level 2
@@ -38,12 +39,12 @@ This file demonstrates every common Markdown element so AEM's rendering pipeline
 Alternative H1 (Setext style)
 ==============================
 
-Alternative H2 (Setext style)
+Alternative H2 (Setext style) {#headingsl2}
 ------------------------------
 
 ---
 
-## Paragraphs and Inline Text
+## Paragraphs and Inline Text {#paragraphs-and-inline-text}
 
 This is a standard paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
 
@@ -74,7 +75,7 @@ This line follows immediately on a new line.
 
 ---
 
-## Blockquotes
+## Blockquotes {#blockquotes}
 
 > This is a single-level blockquote. It can span multiple lines and will be wrapped into a single block by the parser.
 
