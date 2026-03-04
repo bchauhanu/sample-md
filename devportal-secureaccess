@@ -1,0 +1,494 @@
+# MDX Template Guide
+
+> Authoring conventions for Allegion Developer Portal documentation using Astro + MDX.
+
+This guide defines the MDX syntax conventions that produce HTML output matching the Allegion Developer Portal styling (Bootstrap + custom CSS).
+
+---
+
+## Front Matter
+
+Every MDX file begins with YAML front matter:
+
+```yaml
+---
+layout: ../layouts/DocLayout.astro
+title: "Page Title"
+subtitle: "Optional subtitle"
+lastModified: "MM.DD.YYYY"
+---
+```
+
+After the front matter, import the components you need:
+
+```mdx
+---
+layout: ../layouts/DocLayout.astro
+title: "Page Title"
+---
+
+import Panel from "../components/Panel.astro";
+import Badge from "../components/Badge.astro";
+import Steps from "../components/Steps.astro";
+import Image from "../components/Image.astro";
+import ImageGrid from "../components/ImageGrid.astro";
+import Accordion from "../components/Accordion.astro";
+import Mermaid from "../components/Mermaid.astro";
+```
+
+---
+
+## Headings
+
+Standard Markdown headings. For anchor links, use explicit HTML IDs:
+
+```mdx
+## Overview
+
+<h3 id="getting-started">Getting Started</h3>
+```
+
+The explicit `id` attribute ensures anchor links like `#getting-started` work correctly.
+
+---
+
+## Panels / Callouts
+
+Use the `<Panel>` component for styled callout boxes:
+
+### Warning Panel (Yellow)
+
+```mdx
+<Panel type="warning" title="Important Notice">
+This feature will be deprecated in the next major release. Please migrate to the new API.
+</Panel>
+```
+
+### Success Panel (Green)
+
+```mdx
+<Panel type="success" title="Good News">
+Your existing integrations will continue to work without modification.
+</Panel>
+```
+
+### Info Panel (Blue)
+
+```mdx
+<Panel type="info" title="Note">
+This endpoint requires **API version 2.0** or higher.
+</Panel>
+```
+
+### Danger Panel (Red)
+
+```mdx
+<Panel type="danger" title="Critical">
+Breaking change: This update requires immediate action.
+</Panel>
+```
+
+### Panel Type Reference
+
+| Type      | Color  | Use Case                        |
+| --------- | ------ | ------------------------------- |
+| `warning` | Yellow | Deprecations, important notices |
+| `success` | Green  | Positive news, confirmations    |
+| `info`    | Blue   | Notes, additional information   |
+| `danger`  | Red    | Breaking changes, critical info |
+
+---
+
+## Styled Numbered Steps
+
+Use the `<Steps>` component for process steps with orange circular badges:
+
+```mdx
+<Steps>
+  <li>
+    <strong>Create Account</strong> - Register for a developer account on the portal.
+  </li>
+  <li>
+    <strong>Generate API Key</strong> - Navigate to Settings and create your API credentials.
+  </li>
+  <li>
+    <strong>Make First Request</strong> - Test your integration using the sandbox environment.
+  </li>
+</Steps>
+```
+
+---
+
+## Code Blocks
+
+Use standard fenced code blocks. Add a label with a preceding span:
+
+````mdx
+<span class="code-label">JSON Response</span>
+
+```json
+{
+  "status": "success",
+  "data": {
+    "id": "abc123",
+    "name": "Example Resource"
+  }
+}
+```
+````
+
+### Supported Languages
+
+- `json`, `javascript`, `typescript`, `python`, `bash`, `curl`, `html`, `css`, `xml`
+
+---
+
+## Badges
+
+Use the `<Badge>` component for inline labels:
+
+```mdx
+<Badge type="danger">Breaking Change</Badge>
+<Badge type="info">New</Badge>
+<Badge type="success">Stable</Badge>
+```
+
+### Badge Types
+
+| Type      | Color  | Use Case                    |
+| --------- | ------ | --------------------------- |
+| `danger`  | Red    | Breaking changes, required  |
+| `info`    | Blue   | New features, informational |
+| `success` | Green  | Stable, no action needed    |
+
+---
+
+## Tables
+
+Standard GFM tables with optional badges:
+
+```mdx
+| Parameter     | Type     | Required | Description                          |
+| ------------- | -------- | -------- | ------------------------------------ |
+| `api_key`     | `string` | Yes      | Your API authentication key          |
+| `device_id`   | `string` | Yes      | Unique identifier for the device     |
+| `callback_url`| `string` | No       | URL for webhook notifications        |
+```
+
+### Tables with Badges
+
+```mdx
+| Endpoint       | Method | Status                               |
+| -------------- | ------ | ------------------------------------ |
+| `/v2/devices`  | GET    | <Badge type="success">Stable</Badge> |
+| `/v2/users`    | POST   | <Badge type="info">New</Badge>       |
+| `/v1/legacy`   | GET    | <Badge type="danger">Deprecated</Badge> |
+```
+
+---
+
+## Images
+
+### Standard Image
+
+```mdx
+![Alt text](/content/dam/dev-portal/your-project/image.png)
+```
+
+### Image with Caption and Lightbox
+
+```mdx
+<Image
+  src="/content/dam/dev-portal/your-project/screenshot.png"
+  alt="Screenshot description"
+  caption="Figure 1: Dashboard overview"
+  lightbox={true}
+  maxWidth="600px"
+/>
+```
+
+### Side-by-Side Images
+
+```mdx
+<ImageGrid>
+  <Image
+    src="/content/dam/dev-portal/your-project/before.png"
+    alt="Before state"
+    caption="Before"
+    lightbox={true}
+  />
+  <Image
+    src="/content/dam/dev-portal/your-project/after.png"
+    alt="After state"
+    caption="After"
+    lightbox={true}
+  />
+</ImageGrid>
+```
+
+### Image Component Props
+
+| Prop       | Type      | Default | Description                        |
+| ---------- | --------- | ------- | ---------------------------------- |
+| `src`      | `string`  | —       | Image path (required)              |
+| `alt`      | `string`  | —       | Alt text for accessibility         |
+| `caption`  | `string`  | —       | Caption displayed below image      |
+| `lightbox` | `boolean` | `false` | Enable click-to-zoom               |
+| `maxWidth` | `string`  | —       | CSS max-width (e.g., `"600px"`)    |
+
+---
+
+## Process Flow Diagrams (Mermaid)
+
+Use the `<Mermaid>` component for flowcharts:
+
+```mdx
+<Mermaid chart={`
+flowchart LR
+    A[Start] --> B[Step 1]
+    B --> C[Step 2]
+    C --> D[Step 3]
+    D --> E[Complete]
+
+    style A fill:#CD6620,stroke:#CD6620,color:#fff
+    style B fill:#CD6620,stroke:#CD6620,color:#fff
+    style C fill:#CD6620,stroke:#CD6620,color:#fff
+    style D fill:#CD6620,stroke:#CD6620,color:#fff
+    style E fill:#CD6620,stroke:#CD6620,color:#fff
+`} />
+```
+
+### Mermaid Node Types
+
+| Syntax      | Shape        | Example              |
+| ----------- | ------------ | -------------------- |
+| `[text]`    | Rectangle    | `A[Process Step]`    |
+| `((text))`  | Circle       | `A((Start))`         |
+| `{text}`    | Diamond      | `A{Decision?}`       |
+| `([text])`  | Stadium      | `A([Database])`      |
+
+### Clickable Nodes
+
+```mdx
+<Mermaid chart={`
+flowchart LR
+    A[Documentation] --> B[Support Portal]
+
+    click A href "/docs" "View Docs"
+    click B href "https://support.example.com" "Get Help" _blank
+
+    style A fill:#CD6620,stroke:#CD6620,color:#fff
+    style B fill:#CD6620,stroke:#CD6620,color:#fff
+`} />
+```
+
+### Mermaid Notes
+
+- Use `fill:#CD6620` for Allegion orange brand color
+- Use `color:#fff` for white text on colored backgrounds
+- Add `_blank` to open links in new tabs
+- Diagrams render with rounded corners automatically
+
+---
+
+## FAQ Accordions
+
+Use the `<Accordion>` component for expandable FAQ sections:
+
+```mdx
+<Accordion id="faq1" title="How do I authenticate API requests?">
+All API requests require an API key passed in the `Authorization` header.
+See the [Authentication](#authentication) section for details.
+</Accordion>
+
+<Accordion id="faq2" title="What are the rate limits?">
+The API allows 100 requests per minute per API key. Enterprise plans have higher limits.
+</Accordion>
+
+<Accordion id="faq3" title="How do I report a bug?">
+Submit a support ticket through the developer portal or email developer-support@allegion.com.
+</Accordion>
+```
+
+### Accordion Props
+
+| Prop    | Type     | Description                           |
+| ------- | -------- | ------------------------------------- |
+| `id`    | `string` | Unique identifier (required)          |
+| `title` | `string` | Question or heading text (required)   |
+
+---
+
+## Inline Formatting
+
+| Syntax               | Renders To                       |
+| -------------------- | -------------------------------- |
+| `**bold**`           | **bold**                         |
+| `*italic*`           | *italic*                         |
+| `` `code` ``         | `code`                           |
+| `[link text](url)`   | [link text](url)                 |
+
+### Colored Text
+
+```mdx
+<strong style={{ color: "#dc3545" }}>Important: Required field.</strong>
+<span style={{ color: "#28a745" }}>Status: Active</span>
+```
+
+---
+
+## Links
+
+### Internal Anchor Links
+
+```mdx
+See the [Authentication](#authentication) section.
+```
+
+Ensure the target heading has a matching `id`:
+
+```mdx
+<h3 id="authentication">Authentication</h3>
+```
+
+### External Links (Open in New Tab)
+
+```mdx
+<a href="https://developer.allegion.com" target="_blank">Allegion Developer Portal</a>
+```
+
+---
+
+## Horizontal Rules
+
+```mdx
+---
+```
+
+Renders as a horizontal divider.
+
+---
+
+## Complete Example
+
+```mdx
+---
+layout: ../layouts/DocLayout.astro
+title: "API Integration Guide"
+subtitle: "Getting started with the Allegion API"
+lastModified: "02.26.2026"
+---
+
+import Panel from "../components/Panel.astro";
+import Badge from "../components/Badge.astro";
+import Steps from "../components/Steps.astro";
+import Accordion from "../components/Accordion.astro";
+
+# API Integration Guide
+
+### Getting started with the Allegion API
+
+*Last modified: 02.26.2026*
+
+This guide covers the basics of integrating with the Allegion API.
+
+<Panel type="info" title="Prerequisites">
+You'll need a developer account and API key to follow this guide.
+</Panel>
+
+## Overview
+
+<h3 id="quick-start">Quick Start</h3>
+
+Follow these steps to make your first API call:
+
+<Steps>
+  <li><strong>Register</strong> - Create a developer account.</li>
+  <li><strong>Get Credentials</strong> - Generate an API key.</li>
+  <li><strong>Test</strong> - Make your first request.</li>
+</Steps>
+
+<Panel type="success" title="Ready to Go">
+Once you have your API key, you can start making requests immediately.
+</Panel>
+
+## FAQ
+
+<Accordion id="faq1" title="Where do I find my API key?">
+Navigate to Settings > API Keys in the developer portal.
+</Accordion>
+```
+
+---
+
+## Component Reference
+
+| Component   | Purpose                      | Required Props          |
+| ----------- | ---------------------------- | ----------------------- |
+| `Panel`     | Colored callout boxes        | `type`, `title`         |
+| `Badge`     | Inline status labels         | `type`                  |
+| `Steps`     | Numbered process steps       | children (`<li>`)       |
+| `Image`     | Image with optional lightbox | `src`, `alt`            |
+| `ImageGrid` | Side-by-side images          | children (`<Image>`)    |
+| `Accordion` | Expandable FAQ section       | `id`, `title`           |
+| `Mermaid`   | Flowchart/diagram            | `chart`                 |
+
+---
+
+## File Organization
+
+```
+src/
+├── pages/
+│   ├── index.mdx          # Main content page
+│   └── menu.mdx           # Navigation menu
+├── layouts/
+│   ├── DocLayout.astro    # Main page layout
+│   └── MenuLayout.astro   # Menu layout
+├── components/
+│   ├── Panel.astro
+│   ├── Badge.astro
+│   ├── Steps.astro
+│   ├── Image.astro
+│   ├── ImageGrid.astro
+│   ├── Accordion.astro
+│   └── Mermaid.astro
+public/
+└── content/
+    └── dam/
+        └── dev-portal/
+            └── your-project/
+                └── images/
+```
+
+---
+
+## Build & Preview
+
+```bash
+# Development (hot reload)
+npm run dev
+
+# Production build
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+---
+
+## CSS Included
+
+All styles are embedded in `DocLayout.astro`:
+
+- Bootstrap base styles
+- Panel styling (warning, info, success, danger)
+- Styled steps with orange badges
+- Code block labels
+- Table styling with orange headers
+- Accordion styling
+- Mermaid diagram overrides
+- Lightbox support
+
+No external CSS files required.
