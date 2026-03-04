@@ -1,494 +1,958 @@
-# MDX Template Guide
+# Schlage GWE2 Gateway Adoption Guide
 
-> Authoring conventions for Allegion Developer Portal documentation using Astro + MDX.
+### PACS Integration Guide for ENGAGE Gateway 2
 
-This guide defines the MDX syntax conventions that produce HTML output matching the Allegion Developer Portal styling (Bootstrap + custom CSS).
+&nbsp;
 
----
+_Last modified: 02.26.2026_
 
-## Front Matter
+This guide provides comprehensive information for PACS partners to integrate support for the new ENGAGE Gateway 2 (GWE2) into their software solutions.
 
-Every MDX file begins with YAML front matter:
+&nbsp;
 
-```yaml
----
-layout: ../layouts/DocLayout.astro
-title: "Page Title"
-subtitle: "Optional subtitle"
-lastModified: "MM.DD.YYYY"
----
-```
+<Panel type="warning" title="Executive Summary: Important Action Required">
+Orders for GWE will no longer be able to be placed after April 2026. Only GWE2 will be available for order/purchase after that time. Transitioning to support both GWE and GWE2 is important as soon as possible to ensure continued support for your customers for future hardware orders that require a gateway.
 
-After the front matter, import the components you need:
+- The Gateway Model identifier is changing for IP mode API integrations from `gwe` to `gwe2`. This is a breaking change.
+- The number of devices linked to each gateway is reduced from 10 to 5, optimized for better performance and reliability. This change will impact less than 0.5% of installations. Allegion will help make this transition easy for impacted deployments.
+  </Panel>
 
-```mdx
----
-layout: ../layouts/DocLayout.astro
-title: "Page Title"
----
+&nbsp;
 
-import Panel from "../components/Panel.astro";
-import Badge from "../components/Badge.astro";
-import Steps from "../components/Steps.astro";
-import Image from "../components/Image.astro";
-import ImageGrid from "../components/ImageGrid.astro";
-import Accordion from "../components/Accordion.astro";
-import Mermaid from "../components/Mermaid.astro";
-```
-
----
-
-## Headings
-
-Standard Markdown headings. For anchor links, use explicit HTML IDs:
-
-```mdx
 ## Overview
 
-<h3 id="getting-started">Getting Started</h3>
-```
+### What Is Changing
 
-The explicit `id` attribute ensures anchor links like `#getting-started` work correctly.
+Allegion is introducing the **ENGAGE Gateway 2 (GWE2)**, the next generation of the ENGAGE Gateway. The GWE2 is a **drop-in replacement** for the existing GWE and can be used in any deployment scenario where a GWE would have been used.
 
----
+To support the new GWE2 gateway, **PACS software must be updated** to recognize and work with the new model type. The changes required are minimal and focused primarily on:
 
-## Panels / Callouts
+- Recognizing the new `gwe2` model identifier in API requests and responses
+- Updating any hardcoded references from `gwe` to support both `gwe` and `gwe2`
+- Ensuring TLS 1.2 or higher is used for secure communications
 
-Use the `<Panel>` component for styled callout boxes:
-
-### Warning Panel (Yellow)
-
-```mdx
-<Panel type="warning" title="Important Notice">
-This feature will be deprecated in the next major release. Please migrate to the new API.
+<Panel
+  type="success"
+  title="Good News: Existing GWE Units Continue to Function"
+>
+  Existing GWE devices deployed in the field will continue to operate normally.
+  There are hundreds of thousands of GWEs currently in operation, and Allegion
+  will continue to fully support these devices - including firmware updates -
+  for the foreseeable future. This adoption is about supporting _new_ hardware
+  orders going forward.
 </Panel>
-```
 
-### Success Panel (Green)
+&nbsp;
 
-```mdx
-<Panel type="success" title="Good News">
-Your existing integrations will continue to work without modification.
+### Why This Change Is Happening
+
+The GWE2 represents hardware improvements to the ENGAGE Gateway platform, including:
+
+- **Improved Bluetooth performance** – BLE 5.1 (upgraded from BLE 4)
+- **Enhanced security** – TLS 1.2 and 1.3 only (older, compromised protocols removed)
+- **WPA3 wireless security** – Modern wireless security for mobile app commissioning
+- **Optimized edge device connectivity** – Support for up to 5 edge devices per gateway, optimized for better performance and reliability
+- **Improved antenna design** – Smaller form factor (2.5 inches vs 3.5 inches) with equivalent signal strength
+
+<Panel type="info" title="Component End-of-Life">
+  The transition to GWE2 is driven by the **end-of-life (EOL) of the SiLabs
+  BLE112 chipset** used in the current GWE. Since the BLE112 is no longer
+  available, and given the need to enhance gateway performance, introducing the
+  GWE2 becomes both a necessity and an opportunity for improvement.
 </Panel>
-```
 
-### Info Panel (Blue)
+As manufacturing transitions to GWE2, stock of the original GWE will deplete. To ensure your customers can continue to purchase gateways for new installations after April 2026, your PACS software must support GWE2.
 
-```mdx
-<Panel type="info" title="Note">
-This endpoint requires **API version 2.0** or higher.
+&nbsp;
+
+### Timeline & Deadlines
+
+_\* Dates listed below are estimated/projected based on available inventory and are subject to adjustment as stock depletes._
+
+| Milestone                            | Date                | Details                                                                                                          |
+| ------------------------------------ | ------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Schlage GWE2 Adoption Program Begins | February 2026       | Partners notified and activation begins                                                                          |
+| **GWE Stock Depletion**              | **Late April 2026** | GWE will no longer be available for purchase                                                                     |
+| GWE2 Shipping Begins                 | Late April 2026     | Partners who have completed integration can order production GWE2 units. **Note: Test Devices Available Today.** |
+| GWE2 Generally Available             | TBD 2026            | GWE2 available to order for all integrated partners                                                              |
+
+<Panel type="info" title="Development Timeline">
+  We anticipate that with this simple change, most partners can complete the
+  integration updates within **1–4 weeks** of development effort.
 </Panel>
-```
 
-### Danger Panel (Red)
+&nbsp;
 
-```mdx
-<Panel type="danger" title="Critical">
-Breaking change: This update requires immediate action.
-</Panel>
-```
+### Adoption Support Process
 
-### Panel Type Reference
+The GWE2 adoption process is designed to be straightforward and self-service. Allegion Developer Success will guide you through each step, but we've minimized meetings and overhead so your team can focus on the integration work.
 
-| Type      | Color  | Use Case                        |
-| --------- | ------ | ------------------------------- |
-| `warning` | Yellow | Deprecations, important notices |
-| `success` | Green  | Positive news, confirmations    |
-| `info`    | Blue   | Notes, additional information   |
-| `danger`  | Red    | Breaking changes, critical info |
+Here's the end-to-end process for adopting GWE2 support:
 
----
-
-## Styled Numbered Steps
-
-Use the `<Steps>` component for process steps with orange circular badges:
-
-```mdx
-<Steps>
-  <li>
-    <strong>Create Account</strong> - Register for a developer account on the portal.
-  </li>
-  <li>
-    <strong>Generate API Key</strong> - Navigate to Settings and create your API credentials.
-  </li>
-  <li>
-    <strong>Make First Request</strong> - Test your integration using the sandbox environment.
-  </li>
-</Steps>
-```
-
----
-
-## Code Blocks
-
-Use standard fenced code blocks. Add a label with a preceding span:
-
-````mdx
-<span class="code-label">JSON Response</span>
-
-```json
-{
-  "status": "success",
-  "data": {
-    "id": "abc123",
-    "name": "Example Resource"
-  }
-}
-```
-````
-
-### Supported Languages
-
-- `json`, `javascript`, `typescript`, `python`, `bash`, `curl`, `html`, `css`, `xml`
-
----
-
-## Badges
-
-Use the `<Badge>` component for inline labels:
-
-```mdx
-<Badge type="danger">Breaking Change</Badge>
-<Badge type="info">New</Badge>
-<Badge type="success">Stable</Badge>
-```
-
-### Badge Types
-
-| Type      | Color  | Use Case                    |
-| --------- | ------ | --------------------------- |
-| `danger`  | Red    | Breaking changes, required  |
-| `info`    | Blue   | New features, informational |
-| `success` | Green  | Stable, no action needed    |
-
----
-
-## Tables
-
-Standard GFM tables with optional badges:
-
-```mdx
-| Parameter     | Type     | Required | Description                          |
-| ------------- | -------- | -------- | ------------------------------------ |
-| `api_key`     | `string` | Yes      | Your API authentication key          |
-| `device_id`   | `string` | Yes      | Unique identifier for the device     |
-| `callback_url`| `string` | No       | URL for webhook notifications        |
-```
-
-### Tables with Badges
-
-```mdx
-| Endpoint       | Method | Status                               |
-| -------------- | ------ | ------------------------------------ |
-| `/v2/devices`  | GET    | <Badge type="success">Stable</Badge> |
-| `/v2/users`    | POST   | <Badge type="info">New</Badge>       |
-| `/v1/legacy`   | GET    | <Badge type="danger">Deprecated</Badge> |
-```
-
----
-
-## Images
-
-### Standard Image
-
-```mdx
-![Alt text](/content/dam/dev-portal/your-project/image.png)
-```
-
-### Image with Caption and Lightbox
-
-```mdx
-<Image
-  src="/content/dam/dev-portal/your-project/screenshot.png"
-  alt="Screenshot description"
-  caption="Figure 1: Dashboard overview"
-  lightbox={true}
-  maxWidth="600px"
-/>
-```
-
-### Side-by-Side Images
-
-```mdx
-<ImageGrid>
-  <Image
-    src="/content/dam/dev-portal/your-project/before.png"
-    alt="Before state"
-    caption="Before"
-    lightbox={true}
-  />
-  <Image
-    src="/content/dam/dev-portal/your-project/after.png"
-    alt="After state"
-    caption="After"
-    lightbox={true}
-  />
-</ImageGrid>
-```
-
-### Image Component Props
-
-| Prop       | Type      | Default | Description                        |
-| ---------- | --------- | ------- | ---------------------------------- |
-| `src`      | `string`  | —       | Image path (required)              |
-| `alt`      | `string`  | —       | Alt text for accessibility         |
-| `caption`  | `string`  | —       | Caption displayed below image      |
-| `lightbox` | `boolean` | `false` | Enable click-to-zoom               |
-| `maxWidth` | `string`  | —       | CSS max-width (e.g., `"600px"`)    |
-
----
-
-## Process Flow Diagrams (Mermaid)
-
-Use the `<Mermaid>` component for flowcharts:
-
-```mdx
-<Mermaid chart={`
-flowchart LR
-    A[Start] --> B[Step 1]
-    B --> C[Step 2]
-    C --> D[Step 3]
-    D --> E[Complete]
+<Mermaid chart={`flowchart LR
+    A((KickOff<br/>Meeting))
+    B[Review<br/>Docs/Guide<br/><i>This guide</i>]
+    C[Request<br/>Test<br/>Devices<br/><a href='https://developersupport.allegion.com/hc/en-us/requests/new' target='_blank'>Ticket</a>]
+    D[Make Required<br/>Code Changes<br/>& Test]
+    E[Complete &<br/>Send Attestation<br/>to Allegion<br/><a href='https://developersupport.allegion.com/hc/en-us/requests/new' target='_blank'>Ticket</a>]
+    
+    A --> B --> C --> D --> E
 
     style A fill:#CD6620,stroke:#CD6620,color:#fff
     style B fill:#CD6620,stroke:#CD6620,color:#fff
     style C fill:#CD6620,stroke:#CD6620,color:#fff
     style D fill:#CD6620,stroke:#CD6620,color:#fff
-    style E fill:#CD6620,stroke:#CD6620,color:#fff
-`} />
-```
+    style E fill:#CD6620,stroke:#CD6620,color:#fff`} />
 
-### Mermaid Node Types
-
-| Syntax      | Shape        | Example              |
-| ----------- | ------------ | -------------------- |
-| `[text]`    | Rectangle    | `A[Process Step]`    |
-| `((text))`  | Circle       | `A((Start))`         |
-| `{text}`    | Diamond      | `A{Decision?}`       |
-| `([text])`  | Stadium      | `A([Database])`      |
-
-### Clickable Nodes
-
-```mdx
-<Mermaid chart={`
-flowchart LR
-    A[Documentation] --> B[Support Portal]
-
-    click A href "/docs" "View Docs"
-    click B href "https://support.example.com" "Get Help" _blank
-
-    style A fill:#CD6620,stroke:#CD6620,color:#fff
-    style B fill:#CD6620,stroke:#CD6620,color:#fff
-`} />
-```
-
-### Mermaid Notes
-
-- Use `fill:#CD6620` for Allegion orange brand color
-- Use `color:#fff` for white text on colored backgrounds
-- Add `_blank` to open links in new tabs
-- Diagrams render with rounded corners automatically
-
----
-
-## FAQ Accordions
-
-Use the `<Accordion>` component for expandable FAQ sections:
-
-```mdx
-<Accordion id="faq1" title="How do I authenticate API requests?">
-All API requests require an API key passed in the `Authorization` header.
-See the [Authentication](#authentication) section for details.
-</Accordion>
-
-<Accordion id="faq2" title="What are the rate limits?">
-The API allows 100 requests per minute per API key. Enterprise plans have higher limits.
-</Accordion>
-
-<Accordion id="faq3" title="How do I report a bug?">
-Submit a support ticket through the developer portal or email developer-support@allegion.com.
-</Accordion>
-```
-
-### Accordion Props
-
-| Prop    | Type     | Description                           |
-| ------- | -------- | ------------------------------------- |
-| `id`    | `string` | Unique identifier (required)          |
-| `title` | `string` | Question or heading text (required)   |
-
----
-
-## Inline Formatting
-
-| Syntax               | Renders To                       |
-| -------------------- | -------------------------------- |
-| `**bold**`           | **bold**                         |
-| `*italic*`           | *italic*                         |
-| `` `code` ``         | `code`                           |
-| `[link text](url)`   | [link text](url)                 |
-
-### Colored Text
-
-```mdx
-<strong style={{ color: "#dc3545" }}>Important: Required field.</strong>
-<span style={{ color: "#28a745" }}>Status: Active</span>
-```
-
----
-
-## Links
-
-### Internal Anchor Links
-
-```mdx
-See the [Authentication](#authentication) section.
-```
-
-Ensure the target heading has a matching `id`:
-
-```mdx
-<h3 id="authentication">Authentication</h3>
-```
-
-### External Links (Open in New Tab)
-
-```mdx
-<a href="https://developer.allegion.com" target="_blank">Allegion Developer Portal</a>
-```
-
----
-
-## Horizontal Rules
-
-```mdx
----
-```
-
-Renders as a horizontal divider.
-
----
-
-## Complete Example
-
-```mdx
----
-layout: ../layouts/DocLayout.astro
-title: "API Integration Guide"
-subtitle: "Getting started with the Allegion API"
-lastModified: "02.26.2026"
----
-
-import Panel from "../components/Panel.astro";
-import Badge from "../components/Badge.astro";
-import Steps from "../components/Steps.astro";
-import Accordion from "../components/Accordion.astro";
-
-# API Integration Guide
-
-### Getting started with the Allegion API
-
-*Last modified: 02.26.2026*
-
-This guide covers the basics of integrating with the Allegion API.
-
-<Panel type="info" title="Prerequisites">
-You'll need a developer account and API key to follow this guide.
-</Panel>
-
-## Overview
-
-<h3 id="quick-start">Quick Start</h3>
-
-Follow these steps to make your first API call:
+#### Process Steps Explained
 
 <Steps>
-  <li><strong>Register</strong> - Create a developer account.</li>
-  <li><strong>Get Credentials</strong> - Generate an API key.</li>
-  <li><strong>Test</strong> - Make your first request.</li>
+  <li>
+    <strong>KickOff Meeting</strong>
+
+    A brief introductory call with your Allegion Business Development Manager and an Allegion Developer Success resource to review the adoption timeline, answer initial questions, and confirm your integration change requirements. This is typically a 30-60 minute call.
+
+  </li>
+  <li>
+    <strong>Review Docs/Guide</strong>
+
+    You're already here! Review this adoption guide to understand the technical changes required. The documentation covers everything you need—API changes, code examples, and testing guidance.
+
+  </li>
+  <li>
+    <strong>Request Test Devices</strong>
+
+    Submit a support ticket to request GWE2 test hardware. See the [Requesting Test Devices](#test-devices) section for detailed instructions.
+
+  </li>
+  <li>
+    <strong>Make Required Code Changes & Test</strong>
+
+    Implement the integration changes outlined in the [How-To Guide](#how-to-guide) section. Test thoroughly with your GWE2 hardware.
+
+  </li>
+  <li>
+    <strong>Complete & Send Attestation to Allegion</strong>
+
+    Once testing is complete, fill out the GWE2 Adoption Attestation Sheet and submit it via support ticket.
+
+  </li>
 </Steps>
 
-<Panel type="success" title="Ready to Go">
-Once you have your API key, you can start making requests immediately.
+<Panel type="success" title="Self-Service by Design">
+  This process is intentionally lightweight. There are no recurring weekly
+  project meetings or lengthy validation cycles. You have access to all
+  documentation and can proceed at your own pace. Allegion Developer Success is
+  available via ticket if you encounter issues or have questions.
 </Panel>
 
-## FAQ
+&nbsp;
 
-<Accordion id="faq1" title="Where do I find my API key?">
-Navigate to Settings > API Keys in the developer portal.
-</Accordion>
+<h2 id="quick-reference">Quick Reference: GWE vs GWE2 Label</h2>
+
+&nbsp;
+
+<ImageGrid>
+  <Image
+    src="/content/dam/dev-portal/gwe2-adoption/original-gwe.png"
+    alt="Original GWE Gateway"
+    caption="GWE (Original)"
+    lightbox={true}
+    maxWidth="200px"
+  />
+  <Image
+    src="/content/dam/dev-portal/gwe2-adoption/gwe2.png"
+    alt="New GWE2 Gateway"
+    caption="GWE2 (New)"
+    lightbox={true}
+    maxWidth="200px"
+  />
+</ImageGrid>
+
+&nbsp;
+
+### Feature Comparison
+
+| Feature                              | GWE (Original)                         | GWE2 (New)                                                          | PACS Impact                                     |
+| ------------------------------------ | -------------------------------------- | ------------------------------------------------------------------- | ----------------------------------------------- |
+| **Model Identifier**                 | `gwe`                                  | `gwe2`                                                              | <Badge type="danger">Code Change</Badge>        |
+| **Serial Number Prefix**             | Starts with `B1`                       | Starts with `B2`                                                    | <Badge type="info">Detection</Badge>            |
+| **Max Edge Devices**                 | Up to 10 devices                       | Up to 5 devices                                                     | <Badge type="info">Planning</Badge>             |
+| **Bluetooth Version**                | BLE 4                                  | BLE 5.1                                                             | <Badge type="success">No Change</Badge>         |
+| **TLS Support**                      | SSLv3, TLS 1.0, 1.1, 1.2, 1.3          | TLS 1.2, 1.3 only                                                   | <Badge type="danger">May Require Update</Badge> |
+| **Wi-Fi Security (Mobile App)**      | WPA2                                   | WPA3 only                                                           | <Badge type="info">Mobile Device</Badge>        |
+| **Zero-Config Commissioning**        | Supported                              | Not supported                                                       | <Badge type="info">Use DHCP/Static</Badge>      |
+| **Gateway Firmware Updates via ONR** | Supported via RSI ACP                  | Supported via RSI ACP in Q2 2027; via ENGAGE Mobile App today (BLE) | <Badge type="success">Minimal Impact</Badge>    |
+| **RSI Protocol**                     | Full RSI support                       | Identical RSI support                                               | <Badge type="success">No Change</Badge>         |
+| **Websockets Support**               | Full support                           | Identical support                                                   | <Badge type="success">No Change</Badge>         |
+| **Supported Edge Devices**           | NDE, LE, NDEB, LEB, Control, CTE, RMRU | NDE, LE, NDEB, LEB, Control, CTE, RMRU                              | <Badge type="success">No Change</Badge>         |
+
+<Panel type="info" title="About the 5-Device Limit">
+  The GWE2 supports a maximum of 5 edge devices per gateway, compared to 10 for
+  the original GWE. This change was made to improve performance and reliability
+  for connected devices. Allegion has found that **less than 5% of global
+  sites** are deployed with more than 5 devices connected to a single gateway.
+  For sites with this configuration, deploying two GWE2 units is the recommended
+  approach.
+</Panel>
+
+&nbsp;
+
+<h2 id="how-to-guide">How-To Guide: Implementing GWE2 Support</h2>
+
+This section provides step-by-step guidance for updating your PACS software to support both GWE and GWE2 gateways. Your integration approach determines which changes are required:
+
+- [IP/Ethernet Mode](#ip-mode)
+- [RSI/RS-485 Mode](#rsi-mode)
+- [TLS Requirements](#tls-requirements)
+- [Model Detection](#model-detection)
+
+&nbsp;
+
+<h3 id="ip-mode">IP/Ethernet Mode Integrations (410IP)</h3>
+
+If your PACS communicates with the ENGAGE Gateway over IP/Ethernet, you will need to update your code to handle the new `gwe2` model identifier.
+
+<Panel type="warning" title="Key Point">
+  The API changes described below are the **ONLY** changes required for IP-mode
+  integrations. All other features, functionality, and API behaviors remain
+  identical between GWE and GWE2.
+</Panel>
+
+#### API Endpoint Changes
+
+The following API endpoints include the model type in the URL path. Your code must be updated to use `gwe2` when working with GWE2 devices:
+
+| Operation              | GWE Endpoint                                            | GWE2 Endpoint                                            |
+| ---------------------- | ------------------------------------------------------- | -------------------------------------------------------- |
+| Get Device Defaults    | `GET /engage/sites/{siteReference}/devicedefaults/gwe`  | `GET /engage/sites/{siteReference}/devicedefaults/gwe2`  |
+| Set Device Defaults    | `POST /engage/sites/{siteReference}/devicedefaults/gwe` | `POST /engage/sites/{siteReference}/devicedefaults/gwe2` |
+| Update Device Defaults | `PUT /engage/sites/{siteReference}/devicedefaults/gwe`  | `PUT /engage/sites/{siteReference}/devicedefaults/gwe2`  |
+| Get Firmware           | `GET /engage/firmware/gwe`                              | `GET /engage/firmware/gwe2`                              |
+
+&nbsp;
+
+#### API Response Changes
+
+The following API responses will return a different model identifier (`gwe2` instead of `gwe`) when working with GWE2 devices:
+
+##### GET /engage/devices/site/&#123;siteReference&#125;
+
+**GWE Response:**
+
+```json
+[
+  {
+    "DeviceReference": "",
+    "FriendlyName": "Gateway",
+    "DeviceType": "gwe",
+    "SerialNumberShort": "B100000000000212",
+    "SerialNumberLong": "0000000000000000B100000000000212",
+    "Timestamp": "635857249394447548"
+  }
+]
 ```
 
----
+**GWE2 Response:**
 
-## Component Reference
-
-| Component   | Purpose                      | Required Props          |
-| ----------- | ---------------------------- | ----------------------- |
-| `Panel`     | Colored callout boxes        | `type`, `title`         |
-| `Badge`     | Inline status labels         | `type`                  |
-| `Steps`     | Numbered process steps       | children (`<li>`)       |
-| `Image`     | Image with optional lightbox | `src`, `alt`            |
-| `ImageGrid` | Side-by-side images          | children (`<Image>`)    |
-| `Accordion` | Expandable FAQ section       | `id`, `title`           |
-| `Mermaid`   | Flowchart/diagram            | `chart`                 |
-
----
-
-## File Organization
-
-```
-src/
-├── pages/
-│   ├── index.mdx          # Main content page
-│   └── menu.mdx           # Navigation menu
-├── layouts/
-│   ├── DocLayout.astro    # Main page layout
-│   └── MenuLayout.astro   # Menu layout
-├── components/
-│   ├── Panel.astro
-│   ├── Badge.astro
-│   ├── Steps.astro
-│   ├── Image.astro
-│   ├── ImageGrid.astro
-│   ├── Accordion.astro
-│   └── Mermaid.astro
-public/
-└── content/
-    └── dam/
-        └── dev-portal/
-            └── your-project/
-                └── images/
+```json
+[
+  {
+    "DeviceReference": "",
+    "FriendlyName": "Gateway",
+    "DeviceType": "gwe2",
+    "SerialNumberShort": "B200000000000212",
+    "SerialNumberLong": "0000000000000000B200000000000212",
+    "Timestamp": "635857249394447548"
+  }
+]
 ```
 
----
+##### GET &#123;&#123;GatewayIP&#125;&#125;/gateway/deviceInfo
 
-## Build & Preview
+The gateway's direct device info endpoint will return `"mdl": "gwe2"` in the response:
+
+```json
+{
+  "gatewayDeviceInfo": {
+    "fwVer": {
+      "main": "1.49.10",
+      "ble2": "0.0.7",
+      "mainBl": "2014.10.0.2",
+      "macAdr": "00409D63028E",
+      "ethernetMacAdr": "00409D63028D"
+    },
+    "gatewayParameters": {
+      "hostProtocol": "ipEngage",
+      "deviceName": "Gateway IP Mode",
+      "mdl": "gwe2",
+      "mainSn": "a0b1000000000206",
+      "mfgDt": "20150515",
+      "hwVer": "01"
+    }
+  }
+}
+```
+
+&nbsp;
+
+#### Recommended Code Pattern
+
+Your PACS software should support **both** GWE and GWE2 simultaneously and for the foreseeable future, as both device types will remain in the field. Here is a recommended pattern:
+
+```javascript
+// Function to determine correct endpoint based on device type
+function getDeviceDefaultsEndpoint(siteReference, deviceType) {
+  const modelType = deviceType.toLowerCase(); // 'gwe' or 'gwe2'
+  return `/engage/sites/${siteReference}/devicedefaults/${modelType}`;
+}
+
+// Function to get firmware endpoint
+function getFirmwareEndpoint(deviceType) {
+  const modelType = deviceType.toLowerCase(); // 'gwe' or 'gwe2'
+  return `/engage/firmware/${modelType}`;
+}
+
+// Example: Fetch device defaults for a specific gateway
+async function getGatewayDefaults(siteReference, gateway) {
+  const endpoint = getDeviceDefaultsEndpoint(siteReference, gateway.DeviceType);
+
+  const response = await fetch(`${ENGAGE_API_BASE}${endpoint}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  return response.json();
+}
+
+// Example: Handle devices from site, supporting both GWE and GWE2
+async function processGateways(siteReference) {
+  const devices = await getSiteDevices(siteReference);
+
+  for (const device of devices) {
+    if (device.DeviceType === "gwe" || device.DeviceType === "gwe2") {
+      console.log(
+        `Processing ${device.DeviceType} gateway: ${device.SerialNumberShort}`,
+      );
+      const defaults = await getGatewayDefaults(siteReference, device);
+      // Process gateway...
+    }
+  }
+}
+```
+
+```python
+import requests
+
+def get_device_defaults_endpoint(site_reference: str, device_type: str) -> str:
+    """Determine correct endpoint based on device type."""
+    model_type = device_type.lower()  # 'gwe' or 'gwe2'
+    return f"/engage/sites/{site_reference}/devicedefaults/{model_type}"
+
+def get_firmware_endpoint(device_type: str) -> str:
+    """Get firmware endpoint for device type."""
+    model_type = device_type.lower()  # 'gwe' or 'gwe2'
+    return f"/engage/firmware/{model_type}"
+
+def get_gateway_defaults(site_reference: str, gateway: dict) -> dict:
+    """Fetch device defaults for a specific gateway."""
+    endpoint = get_device_defaults_endpoint(site_reference, gateway['DeviceType'])
+
+    response = requests.get(
+        f"{ENGAGE_API_BASE}{endpoint}",
+        headers={
+            'Authorization': f'Bearer {access_token}',
+            'Content-Type': 'application/json'
+        }
+    )
+    response.raise_for_status()
+    return response.json()
+
+def process_gateways(site_reference: str):
+    """Handle devices from site, supporting both GWE and GWE2."""
+    devices = get_site_devices(site_reference)
+
+    for device in devices:
+        if device['DeviceType'] in ('gwe', 'gwe2'):
+            print(f"Processing {device['DeviceType']} gateway: {device['SerialNumberShort']}")
+            defaults = get_gateway_defaults(site_reference, device)
+            # Process gateway...
+```
 
 ```bash
-# Development (hot reload)
-npm run dev
+# Get device defaults for a GWE2 gateway
+curl -X GET "https://engage.allegion.com/engage/sites/{siteReference}/devicedefaults/gwe2" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json"
 
-# Production build
-npm run build
-
-# Preview production build
-npm run preview
+# Get firmware information for GWE2
+curl -X GET "https://engage.allegion.com/engage/firmware/gwe2" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json"
 ```
+
+&nbsp;
+
+<h3 id="rsi-mode">RSI/RS-485 Mode Integrations (410RSI)</h3>
+
+If your PACS communicates with the ENGAGE Gateway via RS-485 (RSI protocol), good news: **no code changes are required** for RSI-mode integrations.
+
+<Panel type="success" title="RSI Mode: No Code Changes Required">
+  In all RSI messages and responses, the GWE2 will continue to be referred to as
+  "GWE" or "ENGAGE Gateway." All RSI commands, responses, features, and
+  functionality remain **completely unchanged** between GWE and GWE2.
+</Panel>
+
+#### Key points for RSI integrations:
+
+- **No RSI protocol changes** – All commands and responses work identically
+- **All features supported** – Everything that works with GWE works with GWE2
+- **Gateway Firmware Updates via ONR** – Over-the-network (ONR) firmware reflash via RSI ACP is _not supported_ on GWE2 **until Q2 2027**. Gateway firmware updates must be performed via the ENGAGE Mobile App over BLE between now and Q2 2027.
+- **Edge Device Firmware Updates from Gateway via ONR** – Updating edge device firmware over RSI via the gateway remains fully supported on GWE2
+
+If your RSI integration also uses any ENGAGE Cloud API calls (for site management, etc.), review the [IP Mode section](#ip-mode) for those specific API changes.
+
+&nbsp;
+
+<h3 id="tls-requirements">TLS Requirements</h3>
+
+The GWE2 **only supports TLS 1.2 and TLS 1.3**. Older protocols (SSLv3, TLS 1.0, TLS 1.1) are not supported.
+
+<Panel type="warning" title="Action Required if Using Older TLS Versions">
+  If your PACS software currently uses TLS 1.0 or TLS 1.1 to communicate with
+  gateways, you must update to TLS 1.2 or higher. This is a security best
+  practice regardless of GWE2 adoption, as TLS 1.0 and 1.1 are considered
+  compromised protocols and should not be used for secure communications.
+</Panel>
+
+#### Verifying and Configuring TLS Version
+
+```javascript
+const https = require("https");
+const tls = require("tls");
+
+// Set minimum TLS version to 1.2
+const agent = new https.Agent({
+  minVersion: "TLSv1.2",
+  maxVersion: "TLSv1.3",
+});
+
+// Use the agent in your requests
+const response = await fetch(gatewayUrl, {
+  agent: agent,
+});
+
+// Alternative: Set globally for all https requests
+tls.DEFAULT_MIN_VERSION = "TLSv1.2";
+```
+
+```python
+import ssl
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.ssl_ import create_urllib3_context
+
+class TLSAdapter(HTTPAdapter):
+    """Force TLS 1.2 or higher."""
+
+    def init_poolmanager(self, *args, **kwargs):
+        ctx = create_urllib3_context()
+        ctx.minimum_version = ssl.TLSVersion.TLSv1_2
+        ctx.maximum_version = ssl.TLSVersion.TLSv1_3
+        kwargs['ssl_context'] = ctx
+        return super().init_poolmanager(*args, **kwargs)
+
+# Create session with TLS 1.2+ enforcement
+session = requests.Session()
+session.mount('https://', TLSAdapter())
+
+# Use the session for your requests
+response = session.get(gateway_url)
+```
+
+```bash
+# Force TLS 1.2
+curl --tlsv1.2 -X GET "https://gateway-ip/gateway/deviceInfo"
+
+# Force TLS 1.3
+curl --tlsv1.3 -X GET "https://gateway-ip/gateway/deviceInfo"
+
+# Allow TLS 1.2 or higher (recommended)
+curl --tlsv1.2 --tls-max 1.3 -X GET "https://gateway-ip/gateway/deviceInfo"
+```
+
+&nbsp;
+
+<h3 id="model-detection">Detecting GWE vs GWE2</h3>
+
+Your PACS software should be able to detect whether a gateway is GWE or GWE2. There are two reliable methods:
+
+#### Method 1: Check the DeviceType/Model Field (Recommended)
+
+The `DeviceType` field in API responses and the `mdl` field in gateway deviceInfo responses will clearly indicate the model:
+
+- `gwe` = Original ENGAGE Gateway
+- `gwe2` = New ENGAGE Gateway 2
+
+```javascript
+function getGatewayModel(device) {
+  // From site devices list
+  if (device.DeviceType) {
+    return device.DeviceType.toLowerCase(); // 'gwe' or 'gwe2'
+  }
+
+  // From gateway deviceInfo response
+  if (device.gatewayDeviceInfo?.gatewayParameters?.mdl) {
+    return device.gatewayDeviceInfo.gatewayParameters.mdl.toLowerCase();
+  }
+
+  return null;
+}
+
+function isGWE2(device) {
+  return getGatewayModel(device) === "gwe2";
+}
+```
+
+#### Method 2: Check Serial Number Prefix
+
+As an alternative or supplementary check, you can detect the model from the serial number prefix:
+
+- Serial numbers starting with `B1` = GWE (Original)
+- Serial numbers starting with `B2` = GWE2 (New)
+
+```javascript
+function getModelFromSerial(serialNumber) {
+  if (!serialNumber) return null;
+
+  const serial = serialNumber.toUpperCase();
+
+  if (serial.startsWith("B1")) {
+    return "gwe";
+  } else if (serial.startsWith("B2")) {
+    return "gwe2";
+  }
+
+  return null;
+}
+```
+
+```python
+def get_model_from_serial(serial_number: str) -> str | None:
+    """Detect gateway model from serial number prefix."""
+    if not serial_number:
+        return None
+
+    serial = serial_number.upper()
+
+    if serial.startswith('B1'):
+        return 'gwe'
+    elif serial.startswith('B2'):
+        return 'gwe2'
+
+    return None
+```
+
+&nbsp;
+
+<h2 id="test-devices">Requesting Test Devices</h2>
+
+To test your GWE2 integration, you can request test devices from Allegion Developer Support. Test devices are pre-configured from the factory and ready for commissioning.
+
+<Panel type="info" title="About Test Devices">
+  Test devices arrive factory-fresh and are not linked to any locks. They may
+  not have the latest firmware version installed. We recommend checking for and
+  installing firmware updates via the ENGAGE Mobile App before beginning your
+  integration testing.
+</Panel>
+
+### How to Request Test Devices
+
+<Steps>
+  <li>
+    <strong>Navigate to Allegion Developer Support</strong>
+
+    Open your web browser to: <a href="https://developersupport.allegion.com/hc/en-us/requests/new" target="_blank">Allegion Developer Support Portal</a>
+
+  </li>
+  <li>
+    <strong>Select the Product</strong>
+
+    From the **"Please choose a product below"** dropdown list, select **"Engage"**.
+
+  </li>
+  <li>
+    <strong>Select the Request Type</strong>
+
+    From the **"Type"** dropdown list, select **"Hardware Shipment Request"**.
+
+  </li>
+  <li>
+    <strong>Enter the Subject</strong>
+
+    In the **"Subject"** text field, enter: `GWE2 Test Devices`
+
+  </li>
+  <li>
+    <strong>Enter a description</strong>
+
+    In the **"Description"** text field, you may enter details about your request, or you may leave this field empty.
+
+  </li>
+  <li>
+    <strong>Enter the Purpose</strong>
+
+    In the **"Purpose"** droplist select: `GWE2 Test Adoption`
+
+  </li>
+  <li>
+    <strong>Enter the Target Completion Date</strong>
+
+    In the **"Target Completion Date"** date select field, enter the date by which you target completion of integration activities.
+
+  </li>
+  <li>
+    <strong>Enter the US-based Shipping Address</strong>
+
+    In the **"US-based Shipping Address"** text field, enter the address where you would like the test devices to be shipped. This location must be inside of the continental United States.
+
+  </li>
+  <li>
+    <strong>Enter the Devices Being Requested (including count)</strong>
+
+    In the **"Devices Being Requested"** text field, enter the devices you would like to request, including the quantity of each device. Example entry: `2x GWE2 Gateways, 4x NDEB Locks`
+
+  </li>
+  <li>
+    <strong>Complete and Submit</strong>
+
+    Click **"Submit"** to open your ticket.
+
+    <Panel type="info" title="Note">
+    Devices can only be shipped inside of the continental US. For international destinations, devices must be shipped to final destinations by your company.
+    </Panel>
+
+  </li>
+</Steps>
+
+The Allegion Developer Support team will process your request and follow up with shipping details.
+
+&nbsp;
+
+<h2 id="attestation">Requesting Integration Attestation</h2>
+
+### GWE2 Adoption Attestation Sheet
+
+To ensure partners can complete these changes and get in production with GWE2 in a timely manner, the traditional Validation Process will be replaced with a **Feature Adoption Attestation Process**.
+
+The Attestation Process outlines the specific, limited changes required to support GWE2 and GWE simultaneously and allows partners to self-validate.
+
+<Panel type="info" title="Attestation Template">
+  The Attestation Template Sheet can be downloaded in this guide. See the
+  [Support & Resources](#support) section for the download link.
+</Panel>
+
+### What is Attestation?
+
+GWE2 Adoption Attestation is a simplified version of Allegion's typical Validation Process, used to confirm that PACS software is fully functional and ready for production use. In this simplified approach to validation, partners will use the **GWE2 Adoption Attestation Sheet** to affirm they have implemented all necessary requirements to support the GWE2 Gateway.
+
+**During attestation, you will:**
+
+- Review your integration implementation against the attestation sheet requirements
+- Test your solution to confirm it works correctly with GWE2 devices
+- Verify that all required functionality operates as expected
+- Confirm your solution is ready for production deployment
+- Include a date of attestation and name of the person who completed the sheet at your company
+
+<Panel type="info" title="When to Request Attestation Review">
+  Request Attestation Review after your development team has completed the
+  integration updates and internal testing. You should be able to successfully
+  commission a GWE2 device and perform all standard operations before requesting
+  attestation review.
+</Panel>
+
+### How to Request Attestation Review
+
+<Steps>
+  <li>
+    <strong>Navigate to Allegion Developer Support</strong>
+
+    Open your web browser and go to: <a href="https://developersupport.allegion.com/hc/en-us/requests/new" target="_blank">Allegion Developer Support Portal</a>
+
+  </li>
+  <li>
+    <strong>Select the Product</strong>
+
+    From the **"Please choose a product below"** dropdown list, select **"Engage"**.
+
+  </li>
+  <li>
+    <strong>Select the Request Type</strong>
+
+    From the **"Type"** dropdown list, select **"GWE2 Attestation Request"**.
+
+  </li>
+  <li>
+    <strong>Complete and Submit</strong>
+
+    Fill in the remaining required fields on the form, including details about your integration and what you're ready to have reviewed. Click **"Submit"** to send your request.
+
+  </li>
+</Steps>
+
+The Allegion Developer Support team will review your sheet and provide any additional instructions.
+
+&nbsp;
+
+### Success Criteria
+
+Your integration is considered successfully attested when you can demonstrate:
+
+<Panel type="success">
+✓ Successful commissioning of a GWE2 device
+
+✓ Proper recognition of the GWE2 model type in your software
+
+✓ All standard gateway operations functioning correctly
+
+✓ Simultaneous support for both GWE and GWE2 devices
+
+</Panel>
+
+&nbsp;
+
+<h2 id="faq">Frequently Asked Questions</h2>
+
+<Accordion
+  id="faq1"
+  title="What happens to existing GWE devices already deployed in the field?"
+>
+  Existing GWE devices will continue to operate normally. Allegion will continue
+  to fully support GWE devices in the field - including providing firmware
+  updates - for the foreseeable future. There is no end-of-support date for GWE.
+  This adoption is specifically about supporting new hardware orders going
+  forward—your existing installations are not affected.
+</Accordion>
+
+<Accordion
+  id="faq2"
+  title="Can I deploy GWE2 alongside existing GWE devices at the same site?"
+>
+  Yes, absolutely. You can and should plan to deploy GWE2 devices alongside
+  existing GWE devices at the same site. Your PACS software should support both
+  device types simultaneously, and both will function correctly together within
+  the same site infrastructure.
+</Accordion>
+
+<Accordion id="faq3" title="Will I need to support both GWE and GWE2 forever?">
+  Yes. Both device types will remain in the field for the foreseeable future.
+  Partners who have GWE devices deployed will continue to have them operational
+  alongside new GWE2 deployments. Your software should support both models.
+</Accordion>
+
+<Accordion id="faq4" title="How long will it take to implement GWE2 support?">
+  We anticipate that with this simple change, most partners can complete the
+  integration updates within 1–4 weeks of development effort. The changes are
+  limited to recognizing the new model identifier in API endpoints and
+  responses, plus ensuring TLS 1.2+ compatibility if not already in place.
+</Accordion>
+
+<Accordion
+  id="faq5"
+  title="What if I don't complete the integration by April 2026?"
+>
+  While there is no strict deadline that would break your existing integration,
+  after April 2026, stock of the original GWE will be depleted and only GWE2
+  will be available for purchase. If your software doesn't support GWE2, your
+  customers will not be able to purchase new gateways for their installations.
+  We recommend completing the integration as soon as possible to avoid any gaps
+  in your ability to support customer orders.
+</Accordion>
+
+<Accordion id="faq6" title="Are there any changes to the RSI protocol?">
+  No. There are no changes to the RSI protocol between GWE and GWE2. All
+  commands, responses, and functionality remain completely identical. In RSI
+  messages, the GWE2 will continue to be referred to as "GWE" or "ENGAGE
+  Gateway."
+</Accordion>
+
+<Accordion id="faq7" title="What about Websockets mode? Are there any changes?">
+  No. Websockets support is identical between GWE and GWE2. All features and
+  functionality remain unchanged. The only update needed is to recognize the
+  `gwe2` model identifier in responses.
+</Accordion>
+
+<Accordion
+  id="faq8"
+  title="Why does GWE2 only support 5 edge devices instead of 10?"
+>
+  The 5-device limit on GWE2 was implemented to improve performance and
+  reliability for connected devices. Allegion has found that less than 5% of
+  global sites are deployed with more than 5 devices connected to a single
+  gateway. For the small number of sites that require more than 5 devices,
+  deploying two GWE2 units is the recommended approach.
+</Accordion>
+
+<Accordion id="faq9" title="What devices are compatible with GWE2?">
+  GWE2 is compatible with all the same edge devices as the original GWE,
+  including: NDE, NDEB, LE, LEB, Control (CNTRL, CNTRLB), CTE, and RMRU. There
+  are no devices that work with GWE that will not work with GWE2.
+</Accordion>
+
+<Accordion
+  id="faq10"
+  title="Is zero-configuration commissioning still available?"
+>
+  No. GWE2 does not support zero-configuration commissioning. The gateway must
+  be commissioned using DHCP or a static IP address. This feature was rarely
+  used in field deployments and has been removed from GWE2.
+</Accordion>
+
+<Accordion id="faq11" title="What TLS versions does GWE2 support?">
+  GWE2 supports only TLS 1.2 and TLS 1.3. Older protocols (SSLv3, TLS 1.0, TLS
+  1.1) are not supported. If your system currently uses TLS 1.0 or 1.1, you must
+  update to TLS 1.2 or higher.
+</Accordion>
+
+<Accordion id="faq12" title="How do I update firmware on GWE2?">
+  GWE2 firmware must be updated using the ENGAGE Mobile App over Bluetooth
+  (BLE). Over-the-network firmware updates via RSI are not supported on GWE2
+  until Q2 2027.
+</Accordion>
+
+<Accordion
+  id="faq13"
+  title="What mobile app version is required for commissioning GWE2?"
+>
+  You must use the latest version of the ENGAGE Mobile App to commission GWE2
+  devices. The commissioning process itself is identical to GWE—there are no new
+  steps or screens specific to GWE2.
+</Accordion>
+
+<Accordion
+  id="faq14"
+  title="Does GWE2 require WPA3 for mobile app commissioning?"
+>
+  Yes. GWE2 communicates with mobile apps using WPA3 only (Soft AP mode). Older
+  Android and iOS devices that do not support WPA3 will not be able to
+  commission GWE2 devices directly. Ensure your field technicians have devices
+  that support WPA3 wireless security.
+</Accordion>
+
+<Accordion id="faq15" title="Is the pricing for GWE2 the same as GWE?">
+  Yes, GWE2 pricing will be the same as GWE. Note that the SKU/part number will
+  change for GWE2. Contact your Allegion sales representative for ordering
+  details.
+</Accordion>
+
+<Accordion
+  id="faq16"
+  title="Will Allegion continue to provide firmware updates for GWE?"
+>
+  Yes. Allegion will continue to provide firmware updates for GWE devices for
+  the foreseeable future. There is no planned end-of-support date for GWE
+  firmware.
+</Accordion>
+
+<Accordion id="faq17" title="What are the physical differences between GWE and GWE2?">
+The main physical differences are:
+
+- **Antenna:** GWE2 has a smaller antenna (2.5 inches vs 3.5 inches) with equivalent signal strength
+- **Serial number:** GWE2 serial numbers start with "B2" (GWE starts with "B1")
+- **Labeling:** GWE2 has an orange sticker on the product and packaging for easy identification
+- **Power adapter port:** GWE2 does not have an external power adapter port (use PoE or ACP 2-wire DC)
+- **Wiring label:** RS-485 connection labeling has been updated to standard nomenclature
+  </Accordion>
+
+&nbsp;
+
+<h2 id="support">Support & Resources</h2>
+
+### Architecture Diagrams
+
+The following diagrams illustrate the various ENGAGE integration architectures. GWE2 operates identically to GWE in all of these configurations.
+
+&nbsp;
+
+<Image
+  src="/content/dam/dev-portal/gwe2-adoption/410IP – aka 410Ethernet integration.png"
+  alt="410IP Ethernet Integration Architecture"
+  caption="410IP (Ethernet) Integration – Gateway as Server"
+  centered={true}
+  maxWidth="700px"
+/>
+
+&nbsp;
+
+<Image
+  src="/content/dam/dev-portal/gwe2-adoption/410IP – aka 410Ethernet websockets integration.png"
+  alt="410IP Websockets Integration Architecture"
+  caption="410IP (Ethernet) Websockets Integration – Gateway as Client"
+  centered={true}
+  maxWidth="700px"
+/>
+
+&nbsp;
+
+<Image
+  src="/content/dam/dev-portal/gwe2-adoption/Engage-410RSI – aka RS-485 Gateway Integration.png"
+  alt="RS-485 Gateway Integration Architecture"
+  caption="410RSI (RS-485) Gateway Integration"
+  centered={true}
+  maxWidth="700px"
+/>
+
+&nbsp;
+
+### Developer Support
+
+| Resource             | Details                                                                                                         |
+| -------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Support Portal**   | <a href="https://developersupport.allegion.com" target="_blank">developersupport.allegion.com</a>               |
+| **Submit a Request** | <a href="https://developersupport.allegion.com/hc/en-us/requests/new" target="_blank">Open a Support Ticket</a> |
+| **Email**            | <a href="mailto:engage.techprodsupport@allegion.com">Email Support</a>                                          |
+| **Phone**            | 1.877.671.7011 (Option 2, then Option 2) — Monday – Friday, 8 AM – 8 PM EST                                     |
+
+### Related Documentation
+
+- <a
+    href="https://commercial.schlage.com/content/dam/allegion-us-2/web-files/schlage/information-documents/ENGAGE_GWE_Gateway_Data_Sheet_110842.pdf"
+    target="_blank"
+  >
+    ENGAGE Gateway Data Sheet
+  </a>
+- <a
+    href="https://commercial.schlage.com/content/dam/allegion-us-2/web-files/schlage/installation-documents/Schlage_ENGAGE_Gateway_Installation_Instructions_and_User_Guide_110964.pdf"
+    target="_blank"
+  >
+    ENGAGE Gateway Installation Guide
+  </a>
+- <a
+    href="https://us.allegion.com/content/dam/allegion-us-2/web-documents-2/UserGuide/Schlage_ENGAGE_User_Guide_113180.pdf"
+    target="_blank"
+  >
+    ENGAGE User Guide
+  </a>
+- <a
+    href="https://developer.allegion.com/content/dam/dev-portal/gwe2-adoption/attestation-sheet/2026-02-06-GWE2-Attestation.xlsx"
+    target="_blank"
+  >
+    GWE2 Adoption Attestation Sheet (Download)
+  </a>
+
+### Quick Links
+
+- [Request Test Devices](#test-devices)
+- [Request Integration Attestation](#attestation)
+- [Frequently Asked Questions](#faq)
+
+&nbsp;
 
 ---
 
-## CSS Included
+**Questions about this guide?** Contact <a href="mailto:engage.techprodsupport@allegion.com">Allegion Developer Support</a>
 
-All styles are embedded in `DocLayout.astro`:
-
-- Bootstrap base styles
-- Panel styling (warning, info, success, danger)
-- Styled steps with orange badges
-- Code block labels
-- Table styling with orange headers
-- Accordion styling
-- Mermaid diagram overrides
-- Lightbox support
-
-No external CSS files required.
+© 2026 Allegion. All rights reserved.
