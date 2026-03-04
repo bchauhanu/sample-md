@@ -154,14 +154,14 @@ Here's the end-to-end process for adopting GWE2 support:
 
 <ImageGrid>
   <Image
-    src="/content/dam/dev-portal/gwe2-adoption/original-gwe.png"
+    src="https://developer.allegion.com/content/dam/dev-portal/gwe2-adoption/original-gwe.png"
     alt="Original GWE Gateway"
     caption="GWE (Original)"
     lightbox={true}
     maxWidth="200px"
   />
   <Image
-    src="/content/dam/dev-portal/gwe2-adoption/gwe2.png"
+    src="https://developer.allegion.com/content/dam/dev-portal/gwe2-adoption/gwe2.png"
     alt="New GWE2 Gateway"
     caption="GWE2 (New)"
     lightbox={true}
@@ -878,7 +878,7 @@ The following diagrams illustrate the various ENGAGE integration architectures. 
 &nbsp;
 
 <Image
-  src="/content/dam/dev-portal/gwe2-adoption/410IP – aka 410Ethernet integration.png"
+  src="https://developer.allegion.com/content/dam/dev-portal/gwe2-adoption/410IP – aka 410Ethernet integration.png"
   alt="410IP Ethernet Integration Architecture"
   caption="410IP (Ethernet) Integration – Gateway as Server"
   centered={true}
@@ -888,7 +888,7 @@ The following diagrams illustrate the various ENGAGE integration architectures. 
 &nbsp;
 
 <Image
-  src="/content/dam/dev-portal/gwe2-adoption/410IP – aka 410Ethernet websockets integration.png"
+  src="https://developer.allegion.com/content/dam/dev-portal/gwe2-adoption/410IP – aka 410Ethernet websockets integration.png"
   alt="410IP Websockets Integration Architecture"
   caption="410IP (Ethernet) Websockets Integration – Gateway as Client"
   centered={true}
@@ -898,7 +898,7 @@ The following diagrams illustrate the various ENGAGE integration architectures. 
 &nbsp;
 
 <Image
-  src="/content/dam/dev-portal/gwe2-adoption/Engage-410RSI – aka RS-485 Gateway Integration.png"
+  src="https://developer.allegion.com/content/dam/dev-portal/gwe2-adoption/Engage-410RSI – aka RS-485 Gateway Integration.png"
   alt="RS-485 Gateway Integration Architecture"
   caption="410RSI (RS-485) Gateway Integration"
   centered={true}
@@ -919,25 +919,25 @@ The following diagrams illustrate the various ENGAGE integration architectures. 
 ### Related Documentation
 
 - <a
-    href="https://commercial.schlage.com/content/dam/allegion-us-2/web-files/schlage/information-documents/ENGAGE_GWE_Gateway_Data_Sheet_110842.pdf"
+    href="https://commercial.schlage.comhttps://developer.allegion.com/content/dam/allegion-us-2/web-files/schlage/information-documents/ENGAGE_GWE_Gateway_Data_Sheet_110842.pdf"
     target="_blank"
   >
     ENGAGE Gateway Data Sheet
   </a>
 - <a
-    href="https://commercial.schlage.com/content/dam/allegion-us-2/web-files/schlage/installation-documents/Schlage_ENGAGE_Gateway_Installation_Instructions_and_User_Guide_110964.pdf"
+    href="https://commercial.schlage.comhttps://developer.allegion.com/content/dam/allegion-us-2/web-files/schlage/installation-documents/Schlage_ENGAGE_Gateway_Installation_Instructions_and_User_Guide_110964.pdf"
     target="_blank"
   >
     ENGAGE Gateway Installation Guide
   </a>
 - <a
-    href="https://us.allegion.com/content/dam/allegion-us-2/web-documents-2/UserGuide/Schlage_ENGAGE_User_Guide_113180.pdf"
+    href="https://us.allegion.comhttps://developer.allegion.com/content/dam/allegion-us-2/web-documents-2/UserGuide/Schlage_ENGAGE_User_Guide_113180.pdf"
     target="_blank"
   >
     ENGAGE User Guide
   </a>
 - <a
-    href="https://developer.allegion.com/content/dam/dev-portal/gwe2-adoption/attestation-sheet/2026-02-06-GWE2-Attestation.xlsx"
+    href="https://developer.allegion.comhttps://developer.allegion.com/content/dam/dev-portal/gwe2-adoption/attestation-sheet/2026-02-06-GWE2-Attestation.xlsx"
     target="_blank"
   >
     GWE2 Adoption Attestation Sheet (Download)
